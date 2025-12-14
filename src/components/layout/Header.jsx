@@ -65,7 +65,7 @@ export default function Header() {
                         )}
                         <button
                             onClick={toggleTheme}
-                            className="p-2 rounded-full hover:bg-accent transition-all duration-300 hover:rotate-12"
+                            className="p-2 rounded-full hover:bg-accent transition-all duration-300 hover:rotate-90 hover:scale-110"
                             aria-label="Toggle Dark Mode"
                             title={
                                 isDark
