@@ -21,3 +21,18 @@ async function fetchClient(endpoint, options = {}) {
 
     return handleResponse(response);
 }
+
+export const api = {
+    login: async (username, password) => {
+        return fetchClient("/users/login", {
+            method: "POST",
+            body: JSON.stringify({ username, password }),
+        });
+    },
+    register: async (username, password, email, name) => {
+        return fetchClient("/users/register", {
+            method: "POST",
+            body: JSON.stringify({ username, password, email, name }),
+        });
+    },
+};
