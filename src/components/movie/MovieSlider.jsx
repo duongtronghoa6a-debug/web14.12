@@ -81,9 +81,80 @@ export default function MovieSlider({
                         >
                             Watch Now
                         </Link>
+                        {/* Carousel Dots/Controls */}
+                        <div className="flex items-center gap-2 ml-4">
+                            <button
+                                onClick={() =>
+                                    setStartIndex(
+                                        (p) =>
+                                            (p - 1 + movies.length) %
+                                            movies.length
+                                    )
+                                }
+                                className="p-2 bg-white/20 rounded-full hover:bg-white/40"
+                            >
+                                <ChevronLeft className="w-5 h-5" />
+                            </button>
+                            <span className="text-sm">
+                                {startIndex + 1}/{movies.length}
+                            </span>
+                            <button
+                                onClick={() =>
+                                    setStartIndex(
+                                        (p) => (p + 1) % movies.length
+                                    )
+                                }
+                                className="p-2 bg-white/20 rounded-full hover:bg-white/40"
+                            >
+                                <ChevronRight className="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         );
     }
+
+    // Classic Slider (3 items per page default)
+    const visibleMovies = movies.slice(startIndex, startIndex + itemsPerPage);
+
+    return (
+        <div className="mb-12">
+            <div className="flex justify-between items-center mb-4 px-2">
+                <h2 className="text-2xl font-bold border-l-4 border-primary pl-3">
+                    {title}
+                </h2>
+            </div>
+
+            <div className="relative group/slider">
+                {/* Left Button */}
+                <button
+                    onClick={handlePrev}
+                    className="absolute left-[-20px] top-1/2 -translate-y-1/2 z-20 p-3 bg-black/50 hover:bg-black/80 text-white rounded-full opacity-0 group-hover/slider:opacity-100 transition-opacity disabled:opacity-0"
+                    aria-label="Previous"
+                >
+                    <ChevronLeft className="w-6 h-6" />
+                </button>
+
+                {/* Right Button */}
+                <button
+                    onClick={handleNext}
+                    className="absolute right-[-20px] top-1/2 -translate-y-1/2 z-20 p-3 bg-black/50 hover:bg-black/80 text-white rounded-full opacity-0 group-hover/slider:opacity-100 transition-opacity"
+                    aria-label="Next"
+                >
+                    <ChevronRight className="w-6 h-6" />
+                </button>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-500">
+                    {visibleMovies.map((movie) => (
+                        <MovieCard key={movie.id} movie={movie} />
+                    ))}
+                    {visibleMovies.length < itemsPerPage && (
+                        // Fillers if needed, or just leave empty space
+                        <div className="hidden"></div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
 }
