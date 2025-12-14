@@ -31,8 +31,10 @@ export default function Header() {
         <div className="w-full flex justify-center bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b sticky top-0 z-50">
             <div className="w-full max-w-[1200px] flex flex-col shadow-sm">
                 {/* Top Header Line */}
-                <div className="flex items-center justify-between px-4 py-2 mt-2">
-                    <span className="font-mono text-sm font-bold text-primary">MSSV: 23120127</span>
+                <div className="flex items-center justify-between px-2 sm:px-4 py-2 mt-2">
+                    <span className="font-mono text-sm font-bold text-primary">
+                        MSSV: 23120127
+                    </span>
                     <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
                         Movies Info
                     </h1>
@@ -40,30 +42,56 @@ export default function Header() {
                         {user ? (
                             <div className="flex items-center gap-2 text-sm">
                                 <User className="w-4 h-4" />
-                                <Link to="/profile" className="hover:underline">{user.username || "User"}</Link>
-                                <button onClick={logout} className="text-xs text-red-500 hover:underline ml-2">Logout</button>
+                                <Link to="/profile" className="hover:underline">
+                                    {user.username || "User"}
+                                </Link>
+                                <button
+                                    onClick={logout}
+                                    className="text-xs text-red-500 hover:underline ml-2"
+                                >
+                                    Logout
+                                </button>
                             </div>
                         ) : (
-                            <Link to="/login" className="text-sm hover:underline">Login</Link>
+                            <Link
+                                to="/login"
+                                className="text-sm hover:underline"
+                            >
+                                Login
+                            </Link>
                         )}
                         <button
                             onClick={toggleTheme}
                             className="p-2 rounded-full hover:bg-accent transition-all duration-300 hover:rotate-12"
                             aria-label="Toggle Dark Mode"
-                            title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                            title={
+                                isDark
+                                    ? "Switch to Light Mode"
+                                    : "Switch to Dark Mode"
+                            }
                         >
-                            {isDark ? <Moon className="w-5 h-5 text-yellow-300 fill-yellow-300" /> : <Sun className="w-5 h-5 text-orange-500 fill-orange-500" />}
+                            {isDark ? (
+                                <Moon className="w-5 h-5 text-yellow-300 fill-yellow-300" />
+                            ) : (
+                                <Sun className="w-5 h-5 text-orange-500 fill-orange-500" />
+                            )}
                         </button>
                     </div>
                 </div>
 
                 {/* Navbar Line */}
                 <nav className="flex items-center justify-between px-4 py-3 bg-secondary/30 mb-2 rounded-b-md">
-                    <Link to="/" className="p-2 hover:bg-accent rounded-full transition-colors" title="Home">
+                    <Link
+                        to="/"
+                        className="p-2 hover:bg-accent rounded-full transition-colors"
+                        title="Home"
+                    >
                         <Home className="w-6 h-6" />
                     </Link>
-
-                    <form onSubmit={handleSearch} className="flex items-center flex-1 max-w-md mx-4 gap-2 relative">
+                    <form
+                        onSubmit={handleSearch}
+                        className="flex items-center flex-1 max-w-md mx-4 gap-2 relative"
+                    >
                         <input
                             type="text"
                             placeholder="Search movies..."
@@ -80,12 +108,15 @@ export default function Header() {
                                 ✕
                             </button>
                         )}
-                        <button type="submit" className="p-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+                        <button
+                            type="submit"
+                            className="p-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+                        >
                             <Search className="w-5 h-5" />
                         </button>
                     </form>
-
-                    <div className="w-8"></div> {/* Spacer to balance layout if needed */}
+                    <div className="w-8"></div>{" "}
+                    {/* Spacer to balance layout if needed */}
                 </nav>
             </div>
         </div>
