@@ -5,7 +5,9 @@ import { useAuth } from "../../context/AuthContext";
 import { cn } from "../../lib/utils";
 
 export default function Header() {
-    const [isDark, setIsDark] = useState(false);
+    const [isDark, setIsDark] = useState(
+        () => localStorage.getItem("theme") === "dark"
+    );
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
     const { user, logout } = useAuth();
@@ -16,6 +18,7 @@ export default function Header() {
         } else {
             document.documentElement.classList.remove("dark");
         }
+        localStorage.setItem("theme", isDark ? "dark" : "light");
     }, [isDark]);
 
     const toggleTheme = () => setIsDark(!isDark);
