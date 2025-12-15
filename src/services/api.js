@@ -35,4 +35,7 @@ export const api = {
             body: JSON.stringify({ username, password, email, name }),
         });
     },
+    searchMovies: async (query, page = 1) => {
+        return fetchClient(`/movies/search?query=${query}&page=${page}`);
+    },
 };
