@@ -249,9 +249,41 @@ export const api = {
         return fetchClient(`/persons/${id}/movie_credits`);
     },
     searchMovies: async (query, page = 1) => {
-        return fetchClient(
-            `/movies/search?q=${encodeURIComponent(query)}&page=${page}`
-        );
+        try {
+            // Fetch 2 pages from API to show more results (e.g., 20-30 items instead of 10)
+            // UI Page 1 -> API Page 1, 2
+            // UI Page 2 -> API Page 3, 4
+            const p1 = page * 2 - 1;
+            const p2 = page * 2;
+
+            const [res1, res2] = await Promise.all([
+                fetchClient(`/movies/search?q=${encodeURIComponent(query)}&page=${p1}`),
+                fetchClient(`/movies/search?q=${encodeURIComponent(query)}&page=${p2}`).catch(() => ({ results: [] }))
+            ]);
+
+            const results1 = res1.results || [];
+            const results2 = res2.results || [];
+
+            // Normalize movies
+            const allMovies = [...results1, ...results2].map(normalizeMovie);
+
+            // Remove duplicates just in case
+            const uniqueMovies = Array.from(new Map(allMovies.map(m => [m.id, m])).values());
+
+            // Adjust total pages (since we consume 2 API pages per 1 UI page)
+            const realTotalPages = res1.total_pages || 1;
+            const newTotalPages = Math.ceil(realTotalPages / 2);
+
+            return {
+                results: uniqueMovies,
+                page: page,
+                total_pages: newTotalPages,
+                total_results: (res1.total_results || 0)
+            };
+        } catch (error) {
+            console.error("Search error:", error);
+            return { results: [], total_pages: 0 };
+        }
     },
     // Favorites API
     getFavorites: async () => {
