@@ -166,6 +166,9 @@ const handleResponse = async (response) => {
         } else {
             data.results = data.results.map(normalizeMovie);
         }
+    } else if (data.cast && Array.isArray(data.cast)) {
+        // Handle person movie credits
+        data.cast = data.cast.map(normalizeMovie);
     }
     // Normalize single objects if they look like movies
     else if (data && !data.data && !data.results) {

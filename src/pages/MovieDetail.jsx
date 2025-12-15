@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { Loader2, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
@@ -7,6 +7,7 @@ import ReviewList from "../components/movie/ReviewList";
 
 export default function MovieDetail() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [movie, setMovie] = useState(null);
     const [credits, setCredits] = useState(null);
     const [reviews, setReviews] = useState([]);
@@ -25,7 +26,9 @@ export default function MovieDetail() {
 
     const toggleFavorite = () => {
         if (!user) {
-            alert("Please login to add to favorites");
+            if (window.confirm("Please login to add to favorites")) {
+                navigate("/login");
+            }
             return;
         }
         const favs =
@@ -171,8 +174,8 @@ export default function MovieDetail() {
                     <button
                         onClick={toggleFavorite}
                         className={`px-6 py-2 rounded-full font-bold mt-4 transition ${isFavorite
-                                ? "bg-red-500 hover:bg-red-600 text-white"
-                                : "bg-primary text-primary-foreground hover:bg-primary/90"
+                            ? "bg-red-500 hover:bg-red-600 text-white"
+                            : "bg-primary text-primary-foreground hover:bg-primary/90"
                             }`}
                     >
                         {isFavorite

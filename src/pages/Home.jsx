@@ -13,8 +13,8 @@ export default function Home() {
         const fetchData = async () => {
             try {
                 const [popularRes, topRatedRes] = await Promise.all([
-                    api.getMoviesPopular(1),
-                    api.getMoviesTopRated(1),
+                    api.getMoviesPopular(1, 30),
+                    api.getMoviesTopRated(1, 30),
                 ]);
 
                 const popMovies = popularRes.results || [];
