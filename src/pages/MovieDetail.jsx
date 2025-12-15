@@ -45,6 +45,8 @@ export default function MovieDetail() {
                     title: movie.title,
                     poster_path: movie.poster_path,
                     vote_average: movie.vote_average,
+                    overview: movie.overview,
+                    release_date: movie.release_date,
                 },
             ];
             localStorage.setItem(
@@ -70,8 +72,8 @@ export default function MovieDetail() {
                 // Use fetched credits if available, otherwise use credits from movie details
                 const finalCredits =
                     creditsData &&
-                    creditsData.cast &&
-                    creditsData.cast.length > 0
+                        creditsData.cast &&
+                        creditsData.cast.length > 0
                         ? creditsData
                         : movieData.credits || { cast: [], crew: [] };
                 setCredits(finalCredits);
@@ -168,11 +170,10 @@ export default function MovieDetail() {
 
                     <button
                         onClick={toggleFavorite}
-                        className={`px-6 py-2 rounded-full font-bold mt-4 transition ${
-                            isFavorite
+                        className={`px-6 py-2 rounded-full font-bold mt-4 transition ${isFavorite
                                 ? "bg-red-500 hover:bg-red-600 text-white"
                                 : "bg-primary text-primary-foreground hover:bg-primary/90"
-                        }`}
+                            }`}
                     >
                         {isFavorite
                             ? "Remove from Favorites"
