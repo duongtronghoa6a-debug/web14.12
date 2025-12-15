@@ -36,6 +36,8 @@ export const api = {
         });
     },
     searchMovies: async (query, page = 1) => {
-        return fetchClient(`/movies/search?query=${query}&page=${page}`);
+        return fetchClient(
+            `/movies/search?query=${encodeURIComponent(query)}&page=${page}`
+        );
     },
 };
