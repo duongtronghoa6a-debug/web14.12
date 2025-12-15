@@ -49,68 +49,55 @@ export default function MovieSlider({
 
         return (
             <div className="mb-12 relative w-full h-[500px] overflow-hidden rounded-xl shadow-2xl group border-2 border-primary/20">
+                {/* Left Banner Nav */}
+                <button
+                    onClick={() => setStartIndex((p) => (p - 1 + movies.length) % movies.length)}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 bg-black/30 hover:bg-black/60 text-white rounded-full transition-all hover:scale-110"
+                >
+                    <ChevronLeft className="w-8 h-8" />
+                </button>
+
+                {/* Right Banner Nav */}
+                <button
+                    onClick={() => setStartIndex((p) => (p + 1) % movies.length)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 bg-black/30 hover:bg-black/60 text-white rounded-full transition-all hover:scale-110"
+                >
+                    <ChevronRight className="w-8 h-8" />
+                </button>
+
                 <div className="absolute top-4 left-4 z-10">
                     <span className="px-3 py-1 bg-yellow-500 text-black font-bold rounded-full text-xs shadow-lg uppercase tracking-wider">
                         Top Revenue
                     </span>
                 </div>
-                <div className="absolute inset-0">
-                    <img
-                        src={
-                            currentMovie.poster_path?.startsWith("http")
-                                ? currentMovie.poster_path
-                                : `https://image.tmdb.org/t/p/original${currentMovie.poster_path}`
-                        }
-                        alt={currentMovie.title}
-                        className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
-                </div>
 
-                <div className="absolute bottom-0 left-0 p-8 w-full md:w-2/3 text-white">
-                    <h2 className="text-4xl font-bold mb-2">
-                        {currentMovie.title}
-                    </h2>
-                    <p className="mb-4 text-gray-300 line-clamp-2">
-                        {currentMovie.overview}
-                    </p>
-                    <div className="flex gap-4">
-                        <Link
-                            to={`/movie/${currentMovie.id}`}
-                            className="px-6 py-3 bg-red-600 rounded-lg font-bold hover:bg-red-700 transition"
-                        >
+                {/* Clickable Area */}
+                <Link to={`/movie/${currentMovie.id}`} className="block w-full h-full relative cursor-pointer">
+                    <div className="absolute inset-0">
+                        <img
+                            src={
+                                currentMovie.poster_path?.startsWith("http")
+                                    ? currentMovie.poster_path
+                                    : `https://image.tmdb.org/t/p/original${currentMovie.poster_path}`
+                            }
+                            alt={currentMovie.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+                    </div>
+
+                    <div className="absolute bottom-0 left-0 p-8 w-full md:w-2/3 text-white pl-20">
+                        <h2 className="text-4xl font-bold mb-2 drop-shadow-lg">
+                            {currentMovie.title}
+                        </h2>
+                        <p className="mb-4 text-gray-200 line-clamp-2 drop-shadow-md">
+                            {currentMovie.overview}
+                        </p>
+                        <div className="inline-block px-6 py-3 bg-red-600 rounded-lg font-bold hover:bg-red-700 transition shadow-lg">
                             Watch Now
-                        </Link>
-                        {/* Carousel Dots/Controls */}
-                        <div className="flex items-center gap-2 ml-4">
-                            <button
-                                onClick={() =>
-                                    setStartIndex(
-                                        (p) =>
-                                            (p - 1 + movies.length) %
-                                            movies.length
-                                    )
-                                }
-                                className="p-2 bg-white/20 rounded-full hover:bg-white/40"
-                            >
-                                <ChevronLeft className="w-5 h-5" />
-                            </button>
-                            <span className="text-sm">
-                                {startIndex + 1}/{movies.length}
-                            </span>
-                            <button
-                                onClick={() =>
-                                    setStartIndex(
-                                        (p) => (p + 1) % movies.length
-                                    )
-                                }
-                                className="p-2 bg-white/20 rounded-full hover:bg-white/40"
-                            >
-                                <ChevronRight className="w-5 h-5" />
-                            </button>
                         </div>
                     </div>
-                </div>
+                </Link>
             </div>
         );
     }
