@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full transition-colors hover:bg-muted-foreground/40;
+}
+
 @layer base {
     :root {
         --background: 0 0% 100%;
@@ -36,7 +55,7 @@
     }
 
     .dark {
-        --background: 220 50% 10%;
+        --background: 222.2 84% 4.9%;
         --foreground: 210 40% 98%;
 
         --card: 222.2 84% 4.9%;
@@ -63,5 +82,15 @@
         --border: 217.2 32.6% 17.5%;
         --input: 217.2 32.6% 17.5%;
         --ring: 212.7 26.8% 83.9%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
     }
 }
