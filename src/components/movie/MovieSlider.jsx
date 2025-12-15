@@ -17,7 +17,7 @@ export default function MovieSlider({
             <div className="mb-12">
                 {title && <h2 className="text-2xl font-bold mb-4">{title}</h2>}
                 <div className="flex justify-center p-12 bg-muted/20 rounded-xl">
-                    <Loader2 className="w-8 h-8 opacity-50" />
+                    <Loader2 className="animate-spin w-8 h-8 opacity-50" />
                 </div>
             </div>
         );
