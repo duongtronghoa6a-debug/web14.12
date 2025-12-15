@@ -48,20 +48,20 @@ const normalizeMovie = (movie) => {
     // Normalize Credits from properties
     const cast = movie.actors
         ? movie.actors.map((a) => ({
-              id: a.id,
-              name: a.name,
-              character: a.character || a.role, // role might be "Actor"
-              profile_path: getValidImage(a.image),
-          }))
+            id: a.id,
+            name: a.name,
+            character: a.character || a.role, // role might be "Actor"
+            profile_path: getValidImage(a.image),
+        }))
         : [];
 
     const crew = movie.directors
         ? movie.directors.map((d) => ({
-              id: d.id,
-              name: d.name,
-              job: "Director", // specific mapping
-              profile_path: getValidImage(d.image),
-          }))
+            id: d.id,
+            name: d.name,
+            job: "Director", // specific mapping
+            profile_path: getValidImage(d.image),
+        }))
         : [];
 
     const credits = { cast, crew };
@@ -84,13 +84,13 @@ const normalizeMovie = (movie) => {
             : undefined,
         reviews: movie.reviews
             ? {
-                  results: movie.reviews.map((r) => ({
-                      ...r,
-                      author: r.username,
-                      created_at: r.date,
-                      id: r.id || Math.random().toString(),
-                  })),
-              }
+                results: movie.reviews.map((r) => ({
+                    ...r,
+                    author: r.username,
+                    created_at: r.date,
+                    id: r.id || Math.random().toString(),
+                })),
+            }
             : undefined,
     };
 };
@@ -228,7 +228,7 @@ export const api = {
     },
     searchMovies: async (query, page = 1) => {
         return fetchClient(
-            `/movies/search?query=${encodeURIComponent(query)}&page=${page}`
+            `/movies/search?q=${encodeURIComponent(query)}&page=${page}`
         );
     },
     // Favorites API
