@@ -45,13 +45,12 @@ export default function MovieCard({ movie }) {
                         <p className="text-gray-300 text-sm line-clamp-3 mb-4">
                             {movie.overview || "No overview available."}
                         </p>
-                        <link
-                            to={`/movie/${movie.id}`}
+                        <span
                             className="inline-block mt-4 px-6 py-2 bg-primary text-primary-foreground rounded-full text-sm font-semibold hover:bg-primary/90 transition-colors cursor-pointer shadow-lg uppercase tracking-wider"
                             aria-label={`View details for ${movie.title}`}
                         >
                             View Details
-                        </link>
+                        </span>
                     </div>
                 </div>
             </Link>
