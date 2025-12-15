@@ -12,6 +12,11 @@ export default function SearchResults() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
+    // Reset to page 1 when query changes
+    useEffect(() => {
+        setPage(1);
+    }, [query]);
+
     useEffect(() => {
         if (query) {
             setLoading(true);
@@ -45,8 +50,12 @@ export default function SearchResults() {
                         </div>
                     ) : (
                         <div className="text-center py-20">
-                            <p className="text-xl text-muted-foreground">No results found for "{query}"</p>
-                            <p className="text-sm text-muted-foreground mt-2">Try searching for a different movie title.</p>
+                            <p className="text-xl text-muted-foreground">
+                                No results found for "{query}"
+                            </p>
+                            <p className="text-sm text-muted-foreground mt-2">
+                                Try searching for a different movie title.
+                            </p>
                         </div>
                     )}
 
@@ -55,15 +64,17 @@ export default function SearchResults() {
                         <div className="flex justify-center gap-4 mt-8">
                             <button
                                 disabled={page <= 1}
-                                onClick={() => setPage(p => p - 1)}
+                                onClick={() => setPage((p) => p - 1)}
                                 className="px-4 py-2 border rounded disabled:opacity-50"
                             >
                                 Previous
                             </button>
-                            <span className="py-2">Page {page} of {totalPages}</span>
+                            <span className="py-2">
+                                Page {page} of {totalPages}
+                            </span>
                             <button
                                 disabled={page >= totalPages}
-                                onClick={() => setPage(p => p + 1)}
+                                onClick={() => setPage((p) => p + 1)}
                                 className="px-4 py-2 border rounded disabled:opacity-50"
                             >
                                 Next
