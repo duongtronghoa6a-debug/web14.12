@@ -8,6 +8,8 @@ export default function PersonDetail() {
     const { id } = useParams();
     const [person, setPerson] = useState(null);
     const [credits, setCredits] = useState([]);
+    const [page, setPage] = useState(1);
+    const itemsPerPage = 8;
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -96,11 +98,56 @@ export default function PersonDetail() {
                     Known For
                 </h2>
                 {credits.length > 0 ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                        {credits.slice(0, 10).map((movie) => (
-                            <MovieCard key={movie.id} movie={movie} />
-                        ))}
-                    </div>
+                    <>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            {credits
+                                .slice(
+                                    (page - 1) * itemsPerPage,
+                                    page * itemsPerPage
+                                )
+                                .map((movie) => (
+                                    <MovieCard key={movie.id} movie={movie} />
+                                ))}
+                        </div>
+
+                        {credits.length > itemsPerPage && (
+                            <div className="flex justify-center items-center gap-4 mt-8">
+                                <button
+                                    onClick={() =>
+                                        setPage((p) => Math.max(1, p - 1))
+                                    }
+                                    disabled={page === 1}
+                                    className="px-4 py-2 bg-primary/10 rounded disabled:opacity-50 hover:bg-primary/20 transition"
+                                >
+                                    Previous
+                                </button>
+                                <span className="text-sm font-medium">
+                                    Page {page} of{" "}
+                                    {Math.ceil(credits.length / itemsPerPage)}
+                                </span>
+                                <button
+                                    onClick={() =>
+                                        setPage((p) =>
+                                            Math.min(
+                                                Math.ceil(
+                                                    credits.length /
+                                                        itemsPerPage
+                                                ),
+                                                p + 1
+                                            )
+                                        )
+                                    }
+                                    disabled={
+                                        page ===
+                                        Math.ceil(credits.length / itemsPerPage)
+                                    }
+                                    className="px-4 py-2 bg-primary/10 rounded disabled:opacity-50 hover:bg-primary/20 transition"
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        )}
+                    </>
                 ) : (
                     <p className="text-muted-foreground">No movies found.</p>
                 )}
