@@ -10,7 +10,7 @@ export default function MovieCard({ movie }) {
         : "https://placehold.co/500x750?text=No+Image";
 
     return (
-        <div className="relative w-full rounded-lg overflow-hidden shadow-md bg-card transition-transform hover:scale-105 hover:shadow-xl duration-300">
+        <div className="group relative w-full rounded-lg overflow-hidden shadow-md bg-card transition-transform hover:scale-105 hover:shadow-xl duration-300">
             <Link to={`/movie/${movie.id}`}>
                 <div className="aspect-[2/3] w-full overflow-hidden">
                     <img
