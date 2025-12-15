@@ -152,9 +152,10 @@ export default function MovieDetail() {
 
                     <div>
                         <h3 className="text-xl font-semibold mb-2">Overview</h3>
-                        <p className="leading-relaxed text-gray-700 dark:text-gray-300">
-                            {movie.overview}
-                        </p>
+                        <div
+                            className="leading-relaxed text-gray-700 dark:text-gray-300"
+                            dangerouslySetInnerHTML={{ __html: movie.overview }}
+                        />
                     </div>
 
                     <div>
@@ -221,6 +222,7 @@ export default function MovieDetail() {
                     ))}
                 </div>
             </div>
+
             {/* Reviews Section */}
             <div>
                 <h2 className="text-2xl font-bold mb-4 border-b pb-2">
