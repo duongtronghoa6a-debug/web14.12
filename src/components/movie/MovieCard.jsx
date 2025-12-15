@@ -47,7 +47,7 @@ export default function MovieCard({ movie }) {
                         </p>
                         <link
                             to={`/movie/${movie.id}`}
-                            className="inline-block mt-4 px-6 py-2 bg-primary text-primary-foreground rounded-full text-sm font-semibold hover:bg-primary/90 transition-colors cursor-pointer"
+                            className="inline-block mt-4 px-6 py-2 bg-primary text-primary-foreground rounded-full text-sm font-semibold hover:bg-primary/90 transition-colors cursor-pointer shadow-lg uppercase tracking-wider"
                             aria-label={`View details for ${movie.title}`}
                         >
                             View Details
