@@ -192,7 +192,7 @@ export default function MovieDetail() {
                             key={actor.id}
                             className="group"
                         >
-                            <div className="aspect-square overflow-hidden mb-2">
+                            <div className="aspect-square rounded-full overflow-hidden mb-2 border hover:border-primary transition">
                                 {actor.profile_path ? (
                                     <img
                                         src={
