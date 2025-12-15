@@ -90,6 +90,21 @@ export default function PersonDetail() {
                     </div>
                 </div>
             </div>
+
+            <div>
+                <h2 className="text-2xl font-bold mb-4 border-b pb-2">
+                    Known For
+                </h2>
+                {credits.length > 0 ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        {credits.slice(0, 10).map((movie) => (
+                            <MovieCard key={movie.id} movie={movie} />
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-muted-foreground">No movies found.</p>
+                )}
+            </div>
         </div>
     );
 }
