@@ -74,11 +74,14 @@ const normalizeMovie = (movie) => {
         rawRate = movie.ratings.imDb || movie.ratings.theMovieDb || movie.ratings.filmAffinity || movie.ratings.metacritic || 0;
     }
 
+    // DEBUG: Inspect objects with no rate (potentially known_for items)
+    if (!rawRate && !movie.overview) {
+        console.log("Normalizing incomplete movie (likely known_for):", movie);
+    }
+
     const valRate = parseFloat(rawRate);
 
-    // Generate a pseudo-random vote count based on ID if missing from API
-    const defaultVotes = movie.id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) * 12;
-
+    // User requested NO fake ratings.
     return {
         ...movie,
         id: movie.id,
@@ -86,7 +89,7 @@ const normalizeMovie = (movie) => {
         poster_path:
             getValidImage(movie.image) || getValidImage(movie.poster_path),
         vote_average: valRate,
-        vote_count: movie.vote_count || (valRate > 0 ? defaultVotes : 0),
+        vote_count: movie.vote_count || 0,
         overview: movie.short_description || movie.plot_full || movie.overview,
         release_date: movie.year ? `${movie.year}-01-01` : movie.release_date,
         runtime: runtime,
@@ -176,7 +179,9 @@ const handleResponse = async (response) => {
         if (
             data.birth_date ||
             data.summary ||
-            (data.role && data.role.includes("Actor"))
+            (data.role && data.role.includes("Actor")) ||
+            data.known_for || // Check for known_for array
+            (data.name && data.id && data.id.startsWith("nm")) // Check for name + id pattern
         ) {
             return normalizePerson(data);
         }
@@ -237,6 +242,7 @@ export const api = {
         return fetchClient(`/movies/${id}/reviews?page=${page}`);
     },
     getPersonDetail: async (id) => {
+        console.log("API calling getPersonDetail for ID:", id);
         return fetchClient(`/persons/${id}`);
     },
     getPersonCredits: async (id) => {

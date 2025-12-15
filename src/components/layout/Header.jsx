@@ -43,7 +43,7 @@ export default function Header() {
                             <div className="flex items-center gap-2 text-sm">
                                 <User className="w-4 h-4" />
                                 <Link to="/profile" className="hover:underline">
-                                    {user.username || "User"}
+                                    {user.name || user.username || "User"}
                                 </Link>
                                 <button
                                     onClick={logout}

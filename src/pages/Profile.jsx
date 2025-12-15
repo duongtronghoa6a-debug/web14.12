@@ -2,15 +2,16 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { User, Heart, Lock, Mail } from "lucide-react";
-import { api } from "../services/api"; // Assuming api has updateProfile
+import { api } from "../services/api";
 
 export default function Profile() {
-    const { user, login, logout } = useAuth();
+    const { user, updateUser, logout } = useAuth(); // Now using updateUser
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: user?.name || "",
-        email: user?.email || "", // Often read-only
+        username: user?.username || "",
+        email: user?.email || "",
         currentPassword: "",
         newPassword: "",
     });
@@ -25,29 +26,44 @@ export default function Profile() {
         e.preventDefault();
         setLoading(true);
         try {
-            // Check if changing password
-            if (formData.newPassword) {
-                if (!formData.currentPassword) {
-                    alert("Please enter current password to set a new one.");
-                    setLoading(false);
-                    return;
-                }
-                // In real app, verify current password API here
+            // Require password for password change
+            if (formData.newPassword && !formData.currentPassword) {
+                alert("Please enter current password to set a new one.");
+                setLoading(false);
+                return;
             }
 
-            // Mock update - in real app call api.updateProfile(formData)
-            // await api.updateProfile(formData); 
+            // Construct payload - ONLY send what changed
+            const payload = {};
+            if (formData.name !== user.name) payload.name = formData.name;
+            // username is often immutable but if API allows:
+            // if (formData.username !== user.username) payload.username = formData.username; 
 
-            // Allow simulated update for UI demo
+            if (formData.newPassword) {
+                payload.password = formData.newPassword;
+                payload.current_password = formData.currentPassword; // Assuming API supports this validation
+            }
+
+            if (Object.keys(payload).length === 0) {
+                alert("No changes detected.");
+                setLoading(false);
+                return;
+            }
+
+            // Call API
+            const updatedUser = await api.updateProfile(payload);
+
+            // Update Context State
+            updateUser(updatedUser);
+
             alert("Profile updated successfully!");
             setIsEditing(false);
-            // Re-login or update context if needed
+            setFormData(prev => ({ ...prev, currentPassword: "", newPassword: "" }));
         } catch (error) {
-            alert("Failed to update profile.");
+            console.error(error);
+            alert("Failed to update profile. " + (error.message || ""));
         } finally {
             setLoading(false);
-            // Reset password fields
-            setFormData(prev => ({ ...prev, currentPassword: "", newPassword: "" }));
         }
     };
 
@@ -58,8 +74,10 @@ export default function Profile() {
                     <div className="flex items-center justify-center w-24 h-24 bg-primary/20 rounded-full mb-4 mx-auto">
                         <User className="w-12 h-12 text-primary" />
                     </div>
-                    <h2 className="text-2xl font-bold">{user.username}</h2>
-                    <p className="text-muted-foreground">Member since {new Date().getFullYear()}</p>
+                    {/* Display NAME if available, else username */}
+                    <h2 className="text-2xl font-bold">{user.name || user.username}</h2>
+                    <p className="text-muted-foreground">@{user.username}</p>
+                    <p className="text-sm text-muted-foreground">Email: {user.email || "N/A"}</p>
 
                     <button
                         onClick={() => setIsEditing(!isEditing)}
@@ -84,17 +102,8 @@ export default function Profile() {
                                 placeholder="Your Name"
                             />
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium flex items-center gap-2">
-                                <Mail className="w-4 h-4" /> Email (Read-only)
-                            </label>
-                            <input
-                                type="email"
-                                value={user.email}
-                                disabled
-                                className="w-full p-2 border rounded-md bg-muted text-muted-foreground"
-                            />
-                        </div>
+
+                        {/* Assuming Email/Username are read-only usually, but showing Name edit above */}
 
                         <div className="border-t pt-4 mt-4">
                             <h3 className="font-semibold mb-4">Change Password</h3>

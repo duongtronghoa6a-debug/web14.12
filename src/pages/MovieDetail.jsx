@@ -194,6 +194,7 @@ export default function MovieDetail() {
                     {credits?.cast?.slice(0, 12).map((actor) => (
                         <Link
                             to={`/person/${actor.id}`}
+                            state={{ backupImage: actor.profile_path }}
                             key={actor.id}
                             className="group"
                         >

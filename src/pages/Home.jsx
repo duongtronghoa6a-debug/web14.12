@@ -12,13 +12,18 @@ export default function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [popularRes, topRatedRes] = await Promise.all([
-                    api.getMoviesPopular(1, 30),
-                    api.getMoviesTopRated(1, 30),
+                const [pop1, pop2, pop3, rated1, rated2, rated3] = await Promise.all([
+                    api.getMoviesPopular(1),
+                    api.getMoviesPopular(2),
+                    api.getMoviesPopular(3),
+                    api.getMoviesTopRated(1),
+                    api.getMoviesTopRated(2),
+                    api.getMoviesTopRated(3),
                 ]);
 
-                const popMovies = popularRes.results || [];
-                const ratedMovies = topRatedRes.results || [];
+                // Combine results to hit ~30 items (12*3 = 36)
+                const popMovies = [...(pop1.results || []), ...(pop2.results || []), ...(pop3.results || [])].slice(0, 30);
+                const ratedMovies = [...(rated1.results || []), ...(rated2.results || []), ...(rated3.results || [])].slice(0, 30);
 
                 setPopularMovies(popMovies); // 20 items usually
                 setTopRatedMovies(ratedMovies); // 20 items usually

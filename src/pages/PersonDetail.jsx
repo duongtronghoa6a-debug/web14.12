@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { api } from "../services/api";
 import { Loader2 } from "lucide-react";
 import MovieCard from "../components/movie/MovieCard";
 
 export default function PersonDetail() {
     const { id } = useParams();
+    const location = useLocation();
+    const backupImage = location.state?.backupImage;
+
     const [person, setPerson] = useState(null);
     const [credits, setCredits] = useState([]);
     const [page, setPage] = useState(1);
@@ -21,10 +24,30 @@ export default function PersonDetail() {
                     api.getPersonCredits(id).catch(() => ({ cast: [] })),
                 ]);
                 setPerson(personData);
-                // Sort credits by popularity or date, allow user to switch?
-                // Requirement just says "list of movies".
-                // Credits structure usually: { cast: [...], crew: [...] }
-                setCredits(creditsData.cast || []);
+                // Prioritize 'known_for' from person details as per new schema
+                let knownFor = personData.known_for || [];
+
+                // If known_for is empty, try to use fetched credits if valid
+                if (knownFor.length === 0 && creditsData && creditsData.cast) {
+                    knownFor = creditsData.cast;
+                }
+
+                // FETCH REAL DETAILS for each movie to get rate/overview
+                // (User requested real data, avoiding fake)
+                if (knownFor.length > 0) {
+                    const detailedMovies = await Promise.all(
+                        knownFor.map(async (m) => {
+                            try {
+                                return await api.getMovieDetail(m.id);
+                            } catch (e) {
+                                return m; // Fallback to original if fetch fails
+                            }
+                        })
+                    );
+                    setCredits(detailedMovies);
+                } else {
+                    setCredits([]);
+                }
             } catch (error) {
                 console.error("Error fetching person:", error);
             } finally {
@@ -47,9 +70,13 @@ export default function PersonDetail() {
         <div>
             <div className="flex flex-col md:flex-row gap-8 mb-12">
                 <div className="w-full md:w-1/4 max-w-[250px] mx-auto md:mx-0">
-                    {person.profile_path ? (
+                    {(person.profile_path || backupImage) ? (
                         <img
-                            src={`https://image.tmdb.org/t/p/w500${person.profile_path}`}
+                            src={
+                                (person.profile_path || backupImage).startsWith("http")
+                                    ? (person.profile_path || backupImage)
+                                    : `https://image.tmdb.org/t/p/w500${person.profile_path || backupImage}`
+                            }
                             alt={person.name}
                             className="w-full rounded-lg shadow-xl"
                         />
@@ -131,7 +158,7 @@ export default function PersonDetail() {
                                             Math.min(
                                                 Math.ceil(
                                                     credits.length /
-                                                        itemsPerPage
+                                                    itemsPerPage
                                                 ),
                                                 p + 1
                                             )
