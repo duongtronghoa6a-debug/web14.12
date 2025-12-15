@@ -5,9 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import { cn } from "../../lib/utils";
 
 export default function Header() {
-    const [isDark, setIsDark] = useState(
-        () => localStorage.getItem("theme") === "dark"
-    );
+    const [isDark, setIsDark] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
     const { user, logout } = useAuth();
@@ -18,7 +16,6 @@ export default function Header() {
         } else {
             document.documentElement.classList.remove("dark");
         }
-        localStorage.setItem("theme", isDark ? "dark" : "light");
     }, [isDark]);
 
     const toggleTheme = () => setIsDark(!isDark);
@@ -34,7 +31,7 @@ export default function Header() {
         <div className="w-full flex justify-center bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b sticky top-0 z-50">
             <div className="w-full max-w-[1200px] flex flex-col shadow-sm">
                 {/* Top Header Line */}
-                <div className="flex items-center justify-between px-2 sm:px-4 py-2 mt-2">
+                <div className="flex items-center justify-between px-4 py-2 mt-2">
                     <span className="font-mono text-sm font-bold text-primary">
                         MSSV: 23120127
                     </span>
@@ -65,7 +62,7 @@ export default function Header() {
                         )}
                         <button
                             onClick={toggleTheme}
-                            className="p-2 rounded-full hover:bg-accent transition-all duration-300 hover:rotate-90 hover:scale-110"
+                            className="p-2 rounded-full hover:bg-accent transition-all duration-300 hover:rotate-12"
                             aria-label="Toggle Dark Mode"
                             title={
                                 isDark
