@@ -180,6 +180,47 @@ export default function MovieDetail() {
                 </div>
             </div>
 
+            {/* Cast Section */}
+            <div className="mb-12">
+                <h2 className="text-2xl font-bold mb-4 border-b pb-2">
+                    Top Cast
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    {credits?.cast?.slice(0, 12).map((actor) => (
+                        <Link
+                            to={`/person/${actor.id}`}
+                            key={actor.id}
+                            className="group"
+                        >
+                            <div className="aspect-square overflow-hidden mb-2">
+                                {actor.profile_path ? (
+                                    <img
+                                        src={
+                                            actor.profile_path.startsWith(
+                                                "http"
+                                            )
+                                                ? actor.profile_path
+                                                : `https://image.tmdb.org/t/p/w200${actor.profile_path}`
+                                        }
+                                        alt={actor.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full bg-accent flex items-center justify-center">
+                                        <User />
+                                    </div>
+                                )}
+                            </div>
+                            <p className="font-semibold text-center text-sm group-hover:text-primary">
+                                {actor.name}
+                            </p>
+                            <p className="text-xs text-center text-muted-foreground">
+                                {actor.character}
+                            </p>
+                        </Link>
+                    ))}
+                </div>
+            </div>
             {/* Reviews Section */}
             <div>
                 <h2 className="text-2xl font-bold mb-4 border-b pb-2">
